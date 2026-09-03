@@ -53,3 +53,61 @@ def test_ingest_command_rejects_a_malformed_date():
     except SystemExit:
         raised = True
     assert raised
+
+
+class FakeConnection:
+    def __init__(self) -> None:
+        self.closed = False
+
+    def close(self) -> None:
+        self.closed = True
+
+
+def test_load_command_loads_all_datasets_by_default(monkeypatch):
+    fake_con = FakeConnection()
+    monkeypatch.setattr(cli, "connect", lambda config: fake_con)
+
+    calls = []
+
+    def fake_load_all(con, config, dataset_ids):
+        calls.append((con, dataset_ids))
+        return dict.fromkeys(DATASETS, 0)
+
+    monkeypatch.setattr(cli, "load_all", fake_load_all)
+
+    exit_code = cli.main(["load"])
+
+    assert exit_code == 0
+    assert calls == [(fake_con, None)]
+    assert fake_con.closed  # the connection is always closed, even on success
+
+
+def test_load_command_can_target_a_single_dataset(monkeypatch):
+    monkeypatch.setattr(cli, "connect", lambda config: FakeConnection())
+    calls = []
+    monkeypatch.setattr(
+        cli,
+        "load_all",
+        lambda con, config, dataset_ids: calls.append(dataset_ids) or {},
+    )
+
+    cli.main(["load", "--dataset", "eco2mix-regional-tr"])
+
+    assert calls == [["eco2mix-regional-tr"]]
+
+
+def test_load_command_closes_the_connection_even_if_loading_fails(monkeypatch):
+    fake_con = FakeConnection()
+    monkeypatch.setattr(cli, "connect", lambda config: fake_con)
+
+    def failing_load_all(con, config, dataset_ids):
+        raise RuntimeError("boom")
+
+    monkeypatch.setattr(cli, "load_all", failing_load_all)
+
+    try:
+        cli.main(["load"])
+    except RuntimeError:
+        pass
+
+    assert fake_con.closed
