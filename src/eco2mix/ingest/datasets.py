@@ -27,6 +27,7 @@ NATIONAL_FIELDS: tuple[str, ...] = (
     "date",
     "heure",
     "date_heure",
+    "perimetre",
     "nature",
     "consommation",
     "fioul",
