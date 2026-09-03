@@ -17,7 +17,7 @@
       "hydraulique": 7462,
       "pompage": -280,
       "bioenergies": 911,
-      "ech_physiques": -2011,
+      "ech_physiques": 4609,
       "taux_co2": 52
     },
     {
@@ -36,7 +36,7 @@
       "hydraulique": 7392,
       "pompage": -270,
       "bioenergies": 906,
-      "ech_physiques": -1951,
+      "ech_physiques": 4396,
       "taux_co2": 52
     },
     {
@@ -55,7 +55,7 @@
       "hydraulique": 7312,
       "pompage": -260,
       "bioenergies": 901,
-      "ech_physiques": -1891,
+      "ech_physiques": 4133,
       "taux_co2": 51
     },
     {
@@ -74,7 +74,7 @@
       "hydraulique": 7242,
       "pompage": -250,
       "bioenergies": 896,
-      "ech_physiques": -1831,
+      "ech_physiques": 3900,
       "taux_co2": 51
     },
     {
@@ -93,7 +93,7 @@
       "hydraulique": 7172,
       "pompage": -240,
       "bioenergies": 891,
-      "ech_physiques": -1771,
+      "ech_physiques": 3627,
       "taux_co2": 50
     }
   ]

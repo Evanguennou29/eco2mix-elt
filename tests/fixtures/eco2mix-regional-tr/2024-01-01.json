@@ -16,7 +16,7 @@
       "hydraulique": 20,
       "pompage": 0,
       "bioenergies": 48,
-      "ech_physiques": -4680
+      "ech_physiques": -1503
     },
     {
       "code_insee_region": "75",
@@ -33,7 +33,7 @@
       "hydraulique": 19,
       "pompage": 0,
       "bioenergies": 47,
-      "ech_physiques": -4650
+      "ech_physiques": -1543
     },
     {
       "code_insee_region": "11",
@@ -50,7 +50,7 @@
       "hydraulique": 3,
       "pompage": 0,
       "bioenergies": 210,
-      "ech_physiques": 6420
+      "ech_physiques": 6445
     },
     {
       "code_insee_region": "11",
@@ -67,7 +67,7 @@
       "hydraulique": 3,
       "pompage": 0,
       "bioenergies": 208,
-      "ech_physiques": 6370
+      "ech_physiques": 6396
     }
   ]
 }
