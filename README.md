@@ -6,6 +6,8 @@ A reproducible ELT pipeline answering when French electricity is cleanest.
 
 ## Demo
 
+![Dashboard demo — the three tabs](docs/eco2mix-dashboard-demo.gif)
+
 **Live dashboard:** https://eco2mix-elt-h7xesyj8z8smnyo34ezqhz.streamlit.app/
 (free-tier Streamlit Cloud app — see [Known limitations](#known-limitations) if it's asleep).
 
