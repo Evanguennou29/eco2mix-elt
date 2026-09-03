@@ -16,7 +16,7 @@ jobs:
           cache: "pip"
 
       - name: Install dependencies
-        run: pip install -e ".[dev]"
+        run: pip install -e ".[dev,orchestration]"
 
       - name: Lint
         run: ruff check .
@@ -33,3 +33,6 @@ jobs:
       - name: dbt build
         working-directory: dbt
         run: dbt build --profiles-dir .
+
+      - name: Validate Dagster definitions
+        run: dagster definitions validate -f orchestration/definitions.py
