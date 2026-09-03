@@ -5,6 +5,12 @@ data/raw/
 
 # Orchestration
 .dagster/
+orchestration/history/
+orchestration/storage/
+orchestration/compute_logs/
+orchestration/schedules/
+orchestration/logs/
+orchestration/*.db
 
 # dbt
 dbt/target/
