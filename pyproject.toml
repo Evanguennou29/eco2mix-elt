@@ -5,7 +5,11 @@ description = "A reproducible ELT pipeline answering when French electricity is 
 readme = "README.md"
 requires-python = ">=3.11"
 license = { text = "MIT" }
-dependencies = []
+dependencies = [
+    "requests>=2.31",
+    "pyarrow>=16.0",
+    "python-dotenv>=1.0",
+]
 
 [project.optional-dependencies]
 dev = ["ruff>=0.6", "pytest>=8.0"]
