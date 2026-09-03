@@ -11,6 +11,7 @@ orchestration/compute_logs/
 orchestration/schedules/
 orchestration/logs/
 orchestration/*.db
+orchestration/.telemetry/
 
 # dbt
 dbt/target/
