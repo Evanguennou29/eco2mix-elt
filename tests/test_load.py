@@ -18,6 +18,7 @@ def _config(tmp_path) -> Config:
         page_size=1000,
         raw_data_dir=tmp_path / "raw",
         duckdb_path=tmp_path / "warehouse.duckdb",
+        marts_dir=tmp_path / "marts",
     )
 
 

@@ -63,6 +63,7 @@ def main() -> None:
         page_size=1000,
         raw_data_dir=REPO_ROOT / "data" / "raw",
         duckdb_path=REPO_ROOT / "warehouse.duckdb",
+        marts_dir=REPO_ROOT / "data" / "marts",
     )
     counts = build(config)
     for dataset_id, count in counts.items():

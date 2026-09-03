@@ -49,6 +49,7 @@ def warehouse(tmp_path):
         page_size=1000,
         raw_data_dir=tmp_path / "raw",
         duckdb_path=tmp_path / "warehouse.duckdb",
+        marts_dir=tmp_path / "marts",
     )
     for dataset_id, spec in DATASETS.items():
         client = FixtureClient(dataset_id)

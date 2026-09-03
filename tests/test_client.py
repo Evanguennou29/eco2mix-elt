@@ -19,6 +19,7 @@ def _config(**overrides) -> Config:
         page_size=2,
         raw_data_dir=Path("unused"),
         duckdb_path=Path("unused.duckdb"),
+        marts_dir=Path("unused_marts"),
     )
     base.update(overrides)
     return Config(**base)

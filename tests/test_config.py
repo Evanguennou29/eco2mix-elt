@@ -12,6 +12,7 @@ def test_load_config_falls_back_to_defaults_without_env_file(monkeypatch, tmp_pa
         "ECO2MIX_PAGE_SIZE",
         "ECO2MIX_RAW_DATA_DIR",
         "ECO2MIX_DUCKDB_PATH",
+        "ECO2MIX_MARTS_DIR",
     ):
         monkeypatch.delenv(key, raising=False)
 
@@ -24,6 +25,7 @@ def test_load_config_falls_back_to_defaults_without_env_file(monkeypatch, tmp_pa
     assert config.page_size == 100
     assert config.raw_data_dir == Path("data/raw")
     assert config.duckdb_path == Path("warehouse.duckdb")
+    assert config.marts_dir == Path("data/marts")
 
 
 def test_load_config_reads_environment_overrides(monkeypatch, tmp_path):
@@ -34,6 +36,7 @@ def test_load_config_reads_environment_overrides(monkeypatch, tmp_path):
     monkeypatch.setenv("ECO2MIX_PAGE_SIZE", "50")
     monkeypatch.setenv("ECO2MIX_RAW_DATA_DIR", str(tmp_path))
     monkeypatch.setenv("ECO2MIX_DUCKDB_PATH", str(tmp_path / "test.duckdb"))
+    monkeypatch.setenv("ECO2MIX_MARTS_DIR", str(tmp_path / "marts"))
 
     config = load_config(env_file=tmp_path / "does-not-exist.env")
 
@@ -44,3 +47,4 @@ def test_load_config_reads_environment_overrides(monkeypatch, tmp_path):
     assert config.page_size == 50
     assert config.raw_data_dir == tmp_path
     assert config.duckdb_path == tmp_path / "test.duckdb"
+    assert config.marts_dir == tmp_path / "marts"

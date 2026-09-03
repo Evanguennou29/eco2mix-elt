@@ -18,6 +18,7 @@ class Config:
     page_size: int
     raw_data_dir: Path
     duckdb_path: Path
+    marts_dir: Path
 
 
 def load_config(env_file: str | Path | None = ".env") -> Config:
@@ -39,4 +40,5 @@ def load_config(env_file: str | Path | None = ".env") -> Config:
         page_size=int(os.environ.get("ECO2MIX_PAGE_SIZE", "100")),
         raw_data_dir=Path(os.environ.get("ECO2MIX_RAW_DATA_DIR", "data/raw")),
         duckdb_path=Path(os.environ.get("ECO2MIX_DUCKDB_PATH", "warehouse.duckdb")),
+        marts_dir=Path(os.environ.get("ECO2MIX_MARTS_DIR", "data/marts")),
     )
