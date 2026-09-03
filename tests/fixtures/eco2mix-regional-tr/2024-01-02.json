@@ -1,0 +1,73 @@
+{
+  "total_count": 4,
+  "results": [
+    {
+      "code_insee_region": "75",
+      "libelle_region": "Nouvelle-Aquitaine",
+      "date": "2024-01-02",
+      "heure": "00:00",
+      "date_heure": "2024-01-01T23:00:00+00:00",
+      "nature": "Données temps réel",
+      "consommation": 4320,
+      "thermique": 28,
+      "nucleaire": 5260,
+      "eolien": 210,
+      "solaire": 0,
+      "hydraulique": 22,
+      "pompage": 0,
+      "bioenergies": 50,
+      "ech_physiques": -4790
+    },
+    {
+      "code_insee_region": "75",
+      "libelle_region": "Nouvelle-Aquitaine",
+      "date": "2024-01-02",
+      "heure": "00:15",
+      "date_heure": "2024-01-01T23:15:00+00:00",
+      "nature": "Données temps réel",
+      "consommation": 4290,
+      "thermique": 27,
+      "nucleaire": 5258,
+      "eolien": 205,
+      "solaire": 0,
+      "hydraulique": 21,
+      "pompage": 0,
+      "bioenergies": 49,
+      "ech_physiques": -4760
+    },
+    {
+      "code_insee_region": "11",
+      "libelle_region": "Île-de-France",
+      "date": "2024-01-02",
+      "heure": "00:00",
+      "date_heure": "2024-01-01T23:00:00+00:00",
+      "nature": "Données temps réel",
+      "consommation": 8380,
+      "thermique": 1520,
+      "nucleaire": 0,
+      "eolien": 9,
+      "solaire": 0,
+      "hydraulique": 3,
+      "pompage": 0,
+      "bioenergies": 215,
+      "ech_physiques": 6610
+    },
+    {
+      "code_insee_region": "11",
+      "libelle_region": "Île-de-France",
+      "date": "2024-01-02",
+      "heure": "00:15",
+      "date_heure": "2024-01-01T23:15:00+00:00",
+      "nature": "Données temps réel",
+      "consommation": 8310,
+      "thermique": 1500,
+      "nucleaire": 0,
+      "eolien": 10,
+      "solaire": 0,
+      "hydraulique": 3,
+      "pompage": 0,
+      "bioenergies": 213,
+      "ech_physiques": 6560
+    }
+  ]
+}
