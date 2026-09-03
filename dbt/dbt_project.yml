@@ -18,3 +18,5 @@ models:
   eco2mix:
     staging:
       +materialized: view
+    marts:
+      +materialized: table
