@@ -6,6 +6,12 @@ data/raw/
 # Orchestration
 .dagster/
 
+# dbt
+dbt/target/
+dbt/logs/
+dbt/dbt_packages/
+dbt/.user.yml
+
 # Python
 __pycache__/
 *.py[cod]
