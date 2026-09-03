@@ -18,6 +18,7 @@ def _config(**overrides) -> Config:
         retry_backoff_base_seconds=0.0,
         page_size=2,
         raw_data_dir=Path("unused"),
+        duckdb_path=Path("unused.duckdb"),
     )
     base.update(overrides)
     return Config(**base)

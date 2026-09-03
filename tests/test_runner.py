@@ -46,6 +46,7 @@ def _config(tmp_path: Path) -> Config:
         retry_backoff_base_seconds=0.0,
         page_size=100,
         raw_data_dir=tmp_path,
+        duckdb_path=tmp_path / "warehouse.duckdb",
     )
 
 

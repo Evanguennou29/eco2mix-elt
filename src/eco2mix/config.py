@@ -17,6 +17,7 @@ class Config:
     retry_backoff_base_seconds: float
     page_size: int
     raw_data_dir: Path
+    duckdb_path: Path
 
 
 def load_config(env_file: str | Path | None = ".env") -> Config:
@@ -37,4 +38,5 @@ def load_config(env_file: str | Path | None = ".env") -> Config:
         retry_backoff_base_seconds=float(os.environ.get("ECO2MIX_RETRY_BACKOFF_BASE_SECONDS", "1")),
         page_size=int(os.environ.get("ECO2MIX_PAGE_SIZE", "100")),
         raw_data_dir=Path(os.environ.get("ECO2MIX_RAW_DATA_DIR", "data/raw")),
+        duckdb_path=Path(os.environ.get("ECO2MIX_DUCKDB_PATH", "warehouse.duckdb")),
     )

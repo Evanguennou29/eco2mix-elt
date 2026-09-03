@@ -11,6 +11,7 @@ def test_load_config_falls_back_to_defaults_without_env_file(monkeypatch, tmp_pa
         "ECO2MIX_RETRY_BACKOFF_BASE_SECONDS",
         "ECO2MIX_PAGE_SIZE",
         "ECO2MIX_RAW_DATA_DIR",
+        "ECO2MIX_DUCKDB_PATH",
     ):
         monkeypatch.delenv(key, raising=False)
 
@@ -22,6 +23,7 @@ def test_load_config_falls_back_to_defaults_without_env_file(monkeypatch, tmp_pa
     assert config.retry_backoff_base_seconds == 1.0
     assert config.page_size == 100
     assert config.raw_data_dir == Path("data/raw")
+    assert config.duckdb_path == Path("warehouse.duckdb")
 
 
 def test_load_config_reads_environment_overrides(monkeypatch, tmp_path):
@@ -31,6 +33,7 @@ def test_load_config_reads_environment_overrides(monkeypatch, tmp_path):
     monkeypatch.setenv("ECO2MIX_RETRY_BACKOFF_BASE_SECONDS", "0.5")
     monkeypatch.setenv("ECO2MIX_PAGE_SIZE", "50")
     monkeypatch.setenv("ECO2MIX_RAW_DATA_DIR", str(tmp_path))
+    monkeypatch.setenv("ECO2MIX_DUCKDB_PATH", str(tmp_path / "test.duckdb"))
 
     config = load_config(env_file=tmp_path / "does-not-exist.env")
 
@@ -40,3 +43,4 @@ def test_load_config_reads_environment_overrides(monkeypatch, tmp_path):
     assert config.retry_backoff_base_seconds == 0.5
     assert config.page_size == 50
     assert config.raw_data_dir == tmp_path
+    assert config.duckdb_path == tmp_path / "test.duckdb"
