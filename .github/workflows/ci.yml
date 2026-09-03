@@ -26,3 +26,10 @@ jobs:
 
       - name: Test
         run: pytest
+
+      - name: Build DuckDB warehouse from fixtures
+        run: python scripts/build_fixture_warehouse.py
+
+      - name: dbt build
+        working-directory: dbt
+        run: dbt build --profiles-dir .
