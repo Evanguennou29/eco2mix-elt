@@ -1,0 +1,134 @@
+version: 2
+
+sources:
+  - name: raw
+    description: >
+      Tables loaded by `python -m eco2mix load` (src/eco2mix/load.py) from
+      the Parquet partitions under data/raw/, one table per ODRE dataset.
+    schema: main
+    tables:
+      - name: national_tr
+        identifier: raw_national_tr
+        description: Real-time national dataset (eco2mix-national-tr).
+      - name: national_cons_def
+        identifier: raw_national_cons_def
+        description: >
+          Consolidated (M+1) and definitive (year+1) national dataset
+          (eco2mix-national-cons-def).
+      - name: regional_tr
+        identifier: raw_regional_tr
+        description: Real-time regional dataset (eco2mix-regional-tr).
+
+models:
+  - name: stg_national
+    description: >
+      One row per (timestamp, filiere) for the French national grid,
+      deduplicated on (timestamp_utc, perimeter) by preferring definitive
+      over consolidated over real-time data for the same instant.
+    columns:
+      - name: national_id
+        description: "Surrogate key: timestamp_utc + perimeter + filiere."
+        tests:
+          - not_null
+          - unique
+      - name: timestamp_utc
+        description: Quarter-hourly instant, UTC.
+        tests:
+          - not_null
+      - name: perimeter
+        description: Always "France" for the national datasets.
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ["France"]
+      - name: data_quality
+        description: Revision stage of the underlying reading.
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ["real_time", "consolidated", "definitive"]
+      - name: filiere
+        description: Generation source for this row's production_mw value.
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values:
+                  - oil
+                  - coal
+                  - gas
+                  - nuclear
+                  - wind
+                  - solar
+                  - hydro
+                  - pumped_hydro
+                  - bioenergy
+      - name: production_mw
+        description: Instantaneous generation for this filiere, in MW.
+      - name: consumption_mw
+        description: Total national consumption at this instant, in MW.
+      - name: carbon_intensity_gco2_kwh
+        description: >
+          RTE's own national carbon intensity signal (gCO2/kWh). Not
+          available at the regional grain — see stg_regional.
+
+  - name: stg_regional
+    description: >
+      One row per (timestamp, region, filiere), deduplicated on
+      (timestamp_utc, region_insee_code).
+    columns:
+      - name: regional_id
+        description: "Surrogate key: timestamp_utc + region_insee_code + filiere."
+        tests:
+          - not_null
+          - unique
+      - name: timestamp_utc
+        description: Quarter-hourly instant, UTC.
+        tests:
+          - not_null
+      - name: region_insee_code
+        description: INSEE code of one of the 12 mainland French regions covered by RTE.
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values:
+                  - "11" # Île-de-France
+                  - "24" # Centre-Val de Loire
+                  - "27" # Bourgogne-Franche-Comté
+                  - "28" # Normandie
+                  - "32" # Hauts-de-France
+                  - "44" # Grand Est
+                  - "52" # Pays de la Loire
+                  - "53" # Bretagne
+                  - "75" # Nouvelle-Aquitaine
+                  - "76" # Occitanie
+                  - "84" # Auvergne-Rhône-Alpes
+                  - "93" # Provence-Alpes-Côte d'Azur
+      - name: data_quality
+        description: Revision stage of the underlying reading.
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ["real_time", "consolidated", "definitive"]
+      - name: filiere
+        description: Generation source for this row's production_mw value.
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values:
+                  - thermal
+                  - nuclear
+                  - wind
+                  - solar
+                  - hydro
+                  - pumped_hydro
+                  - bioenergy
+      - name: production_mw
+        description: Instantaneous generation for this filiere, in MW.
+      - name: consumption_mw
+        description: Total regional consumption at this instant, in MW.
