@@ -1,0 +1,34 @@
+services:
+  dagster:
+    build: .
+    command: ["dagster", "dev", "-f", "orchestration/definitions.py", "-h", "0.0.0.0", "-p", "3000"]
+    ports:
+      - "3000:3000"
+    environment:
+      - ECO2MIX_DUCKDB_PATH=/app/state/warehouse.duckdb
+    volumes:
+      - data_raw:/app/data/raw
+      - data_marts:/app/data/marts
+      - warehouse_state:/app/state
+
+  # Reads only data/marts/*.parquet (shared with the dagster service via
+  # the data_marts volume) — never talks to dagster, DuckDB, or the API.
+  dashboard:
+    build: .
+    command: ["streamlit", "run", "app/main.py", "--server.port=8501", "--server.address=0.0.0.0"]
+    ports:
+      - "8501:8501"
+    volumes:
+      - data_marts:/app/data/marts
+    depends_on:
+      - dagster
+
+volumes:
+  # Named volumes: on first `up`, Docker seeds each from the image's
+  # baked-in content (real ingested/exported data already in the repo),
+  # then every later ingest/export the dagster service runs persists here
+  # across `docker compose down` / `up` cycles instead of being lost with
+  # the container's writable layer.
+  data_raw:
+  data_marts:
+  warehouse_state:
