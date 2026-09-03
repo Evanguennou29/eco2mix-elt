@@ -6,6 +6,7 @@ import argparse
 import datetime as dt
 
 from eco2mix.config import load_config
+from eco2mix.export import MART_TABLE_NAMES, export_all
 from eco2mix.ingest.client import OdreClient
 from eco2mix.ingest.datasets import DATASETS
 from eco2mix.ingest.runner import ingest_range
@@ -44,6 +45,17 @@ def build_parser() -> argparse.ArgumentParser:
         help="Dataset to load; repeatable. Defaults to all three in scope.",
     )
 
+    export_parser = subparsers.add_parser(
+        "export", help="Export dbt mart tables from DuckDB to versioned Parquet under data/marts/"
+    )
+    export_parser.add_argument(
+        "--mart",
+        choices=sorted(MART_TABLE_NAMES),
+        action="append",
+        dest="marts",
+        help="Mart to export; repeatable. Defaults to all three.",
+    )
+
     return parser
 
 
@@ -69,5 +81,15 @@ def main(argv: list[str] | None = None) -> int:
             con.close()
         for dataset_id, count in counts.items():
             print(f"{dataset_id}: loaded {count} row(s) into {TABLE_NAMES[dataset_id]}")
+
+    elif args.command == "export":
+        config = load_config()
+        con = connect(config)
+        try:
+            paths = export_all(con, config.marts_dir, args.marts)
+        finally:
+            con.close()
+        for path in paths:
+            print(f"wrote {path}")
 
     return 0

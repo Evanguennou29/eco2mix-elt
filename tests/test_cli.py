@@ -1,6 +1,8 @@
 import datetime as dt
+from pathlib import Path
 
 from eco2mix import cli
+from eco2mix.export import MART_TABLE_NAMES
 from eco2mix.ingest.datasets import DATASETS
 
 
@@ -107,6 +109,56 @@ def test_load_command_closes_the_connection_even_if_loading_fails(monkeypatch):
 
     try:
         cli.main(["load"])
+    except RuntimeError:
+        pass
+
+    assert fake_con.closed
+
+
+def test_export_command_exports_all_marts_by_default(monkeypatch):
+    fake_con = FakeConnection()
+    monkeypatch.setattr(cli, "connect", lambda config: fake_con)
+
+    calls = []
+
+    def fake_export_all(con, output_dir, marts):
+        calls.append((con, output_dir, marts))
+        return [Path("data/marts") / f"{name}.parquet" for name in MART_TABLE_NAMES]
+
+    monkeypatch.setattr(cli, "export_all", fake_export_all)
+
+    exit_code = cli.main(["export"])
+
+    assert exit_code == 0
+    assert calls == [(fake_con, Path("data/marts"), None)]
+    assert fake_con.closed
+
+
+def test_export_command_can_target_a_single_mart(monkeypatch):
+    monkeypatch.setattr(cli, "connect", lambda config: FakeConnection())
+    calls = []
+    monkeypatch.setattr(
+        cli,
+        "export_all",
+        lambda con, output_dir, marts: calls.append(marts) or [],
+    )
+
+    cli.main(["export", "--mart", "mart_saisonnalite"])
+
+    assert calls == [["mart_saisonnalite"]]
+
+
+def test_export_command_closes_the_connection_even_if_exporting_fails(monkeypatch):
+    fake_con = FakeConnection()
+    monkeypatch.setattr(cli, "connect", lambda config: fake_con)
+
+    def failing_export_all(con, output_dir, marts):
+        raise RuntimeError("boom")
+
+    monkeypatch.setattr(cli, "export_all", failing_export_all)
+
+    try:
+        cli.main(["export"])
     except RuntimeError:
         pass
 
