@@ -1,0 +1,123 @@
+version: 2
+
+models:
+  - name: mart_intensite_horaire
+    description: >
+      Average national carbon intensity (gCO2/kWh) and consumption by hour
+      of day and by calendar month — one row per (month, hour). Answers
+      "when should you consume to emit the least CO2, and does that
+      change with the season" at the national level.
+    columns:
+      - name: intensite_horaire_id
+        description: "Surrogate key: month_number + hour_of_day."
+        tests:
+          - not_null
+          - unique
+      - name: month_number
+        description: Calendar month, 1 (January) to 12 (December).
+        tests:
+          - not_null
+      - name: hour_of_day
+        description: Local (Europe/Paris) hour of day, 0 to 23.
+        tests:
+          - not_null
+      - name: avg_carbon_intensity_gco2_kwh
+        description: Average of RTE's national carbon intensity signal over this bucket.
+      - name: avg_consumption_mw
+        description: Average national consumption over this bucket, in MW.
+      - name: n_observations
+        description: Number of quarter-hourly readings averaged into this row.
+        tests:
+          - not_null
+
+  - name: mart_mix_regional
+    description: >
+      Share of each filiere in each region's total generation — one row
+      per (region, filiere). Answers "does the generation mix, and so the
+      cleanest hour to consume, change by region".
+    columns:
+      - name: mix_regional_id
+        description: "Surrogate key: region_insee_code + filiere."
+        tests:
+          - not_null
+          - unique
+      - name: region_insee_code
+        description: INSEE code of one of the 12 mainland French regions covered by RTE.
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values:
+                  - "11" # Île-de-France
+                  - "24" # Centre-Val de Loire
+                  - "27" # Bourgogne-Franche-Comté
+                  - "28" # Normandie
+                  - "32" # Hauts-de-France
+                  - "44" # Grand Est
+                  - "52" # Pays de la Loire
+                  - "53" # Bretagne
+                  - "75" # Nouvelle-Aquitaine
+                  - "76" # Occitanie
+                  - "84" # Auvergne-Rhône-Alpes
+                  - "93" # Provence-Alpes-Côte d'Azur
+          - relationships:
+              arguments:
+                to: ref('stg_regional')
+                field: region_insee_code
+      - name: filiere
+        description: Generation source this row's share is computed for.
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values:
+                  - thermal
+                  - nuclear
+                  - wind
+                  - solar
+                  - hydro
+                  - pumped_hydro
+                  - bioenergy
+          - relationships:
+              arguments:
+                to: ref('stg_regional')
+                field: filiere
+      - name: total_production_mw
+        description: Sum of this filiere's production for this region over the whole history loaded.
+      - name: region_total_production_mw
+        description: >
+          Sum of every filiere's production for this region — computed
+          independently of total_production_mw (a separate aggregation,
+          then joined back) so the filiere_sum_matches_region_total
+          singular test is a real check, not a tautology.
+      - name: filiere_share
+        description: total_production_mw / region_total_production_mw.
+        tests:
+          - not_null
+
+  - name: mart_saisonnalite
+    description: >
+      Average national carbon intensity and consumption by meteorological
+      season — one row per season. Answers "how much cleaner is one
+      season than another", most directly the summer/winter gap.
+    columns:
+      - name: saisonnalite_id
+        description: Surrogate key, equal to season (already unique at this grain).
+        tests:
+          - not_null
+          - unique
+      - name: season
+        description: Meteorological season (winter = Dec-Feb, etc.).
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ["winter", "spring", "summer", "autumn"]
+      - name: avg_carbon_intensity_gco2_kwh
+        description: Average of RTE's national carbon intensity signal over this season.
+      - name: avg_consumption_mw
+        description: Average national consumption over this season, in MW.
+      - name: n_observations
+        description: Number of quarter-hourly readings averaged into this row.
+        tests:
+          - not_null
