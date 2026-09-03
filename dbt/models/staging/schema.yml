@@ -25,6 +25,19 @@ models:
       One row per (timestamp, filiere) for the French national grid,
       deduplicated on (timestamp_utc, perimeter) by preferring definitive
       over consolidated over real-time data for the same instant.
+    tests:
+      - no_gap_over_24h:
+          arguments:
+            column_name: timestamp_utc
+            partition_by: perimeter
+            max_gap_hours: 24
+      - filiere_sum_matches_balance:
+          arguments:
+            group_by_columns: ["timestamp_utc", "perimeter"]
+            production_column: production_mw
+            consumption_column: consumption_mw
+            net_exchanges_column: net_exchanges_mw
+            tolerance_pct: 10
     columns:
       - name: national_id
         description: "Surrogate key: timestamp_utc + perimeter + filiere."
@@ -78,6 +91,19 @@ models:
     description: >
       One row per (timestamp, region, filiere), deduplicated on
       (timestamp_utc, region_insee_code).
+    tests:
+      - no_gap_over_24h:
+          arguments:
+            column_name: timestamp_utc
+            partition_by: region_insee_code
+            max_gap_hours: 24
+      - filiere_sum_matches_balance:
+          arguments:
+            group_by_columns: ["timestamp_utc", "region_insee_code"]
+            production_column: production_mw
+            consumption_column: consumption_mw
+            net_exchanges_column: net_exchanges_mw
+            tolerance_pct: 10
     columns:
       - name: regional_id
         description: "Surrogate key: timestamp_utc + region_insee_code + filiere."
