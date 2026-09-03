@@ -1,0 +1,15 @@
+# Dagster instance config. DAGSTER_HOME must point at this file's directory
+# (see docker-compose.yml and the README's local quickstart).
+#
+# max_concurrent_runs is capped at 4: a 30-day backfill launches one run
+# per partition, and at the default of 10 concurrent runs, dagster-dbt's
+# DbtProject hit real filelock timeouts under Windows on
+# dbt/target/manifest.concurrent-update-lock (multiple worker subprocesses
+# reconstructing the job definition, and so touching the dbt manifest,
+# at once) — not a bug in the ingestion code itself, but a concurrency
+# level unrealistic for a small local/single-container demo deployment.
+run_coordinator:
+  module: dagster.core.run_coordinator
+  class: QueuedRunCoordinator
+  config:
+    max_concurrent_runs: 4
