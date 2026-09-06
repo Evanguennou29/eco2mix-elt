@@ -15,6 +15,7 @@ Dagster's asset graph, with the daily partitions it backfills:
 
 ![Dagster asset lineage](docs/dagster-ui.jpg)
 
+
 ## The question
 
 At what time should you consume electricity in France to emit the least CO₂ —
