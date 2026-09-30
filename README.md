@@ -15,6 +15,14 @@ comparison, and a seasonal comparison. Selection changes update the charts and
 summary cards. Motion is reduced automatically when the visitor requests it.
 The dashboard interface is in French.
 
+**Overview — hourly carbon intensity across the year:**
+
+![Dashboard overview with hourly profile, annual heatmap, and summary cards](docs/dashboard-overview.png)
+
+**Regions — generation mix and selected-region detail:**
+
+![Dashboard regional view with generation mix charts](docs/dashboard-regions.png)
+
 Dagster's asset graph, with the daily partitions it backfills:
 
 ![Dagster asset lineage](docs/dagster-ui.jpg)
