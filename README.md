@@ -6,10 +6,14 @@ A reproducible ELT pipeline answering when French electricity is cleanest.
 
 ## Demo
 
-![Dashboard demo — the three tabs](docs/eco2mix-dashboard-demo.gif)
-
 **Live dashboard:** https://eco2mix-elt-h7xesyj8z8smnyo34ezqhz.streamlit.app/
 (free-tier Streamlit Cloud app — see [Known limitations](#known-limitations) if it's asleep).
+
+The dashboard opens with an animated, data-driven hourly profile, followed by
+four views: an overview, a month-and-hour explorer, a regional generation-mix
+comparison, and a seasonal comparison. Selection changes update the charts and
+summary cards. Motion is reduced automatically when the visitor requests it.
+The dashboard interface is in French.
 
 Dagster's asset graph, with the daily partitions it backfills:
 
@@ -80,7 +84,7 @@ Dagster is then at `localhost:3000`, the dashboard at `localhost:8501`.
 **Local (Python 3.11):**
 
 ```bash
-pip install -e ".[dev]"
+pip install -e ".[dev]" -r requirements.txt
 python -m eco2mix ingest --start 2024-01-01 --end 2024-01-07 && python -m eco2mix load && (cd dbt && dbt build --profiles-dir .) && python -m eco2mix export
 streamlit run app/main.py
 ```
