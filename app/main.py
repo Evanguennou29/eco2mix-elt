@@ -152,6 +152,10 @@ dirtiest = hourly.loc[hourly[INTENSITY].idxmax()]
 cleanest_season = seasonal.loc[seasonal[INTENSITY].idxmin()]
 ratio = dirtiest[INTENSITY] / cleanest[INTENSITY]
 
+st.markdown(
+    '<h1 class="page-title">Quand l’électricité est-elle la moins carbonée&nbsp;?</h1>',
+    unsafe_allow_html=True,
+)
 signal_panel(hourly, cleanest, dirtiest, cleanest_season)
 
 overview_tab, hourly_tab, regional_tab, seasonal_tab = st.tabs(
